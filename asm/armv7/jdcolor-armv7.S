@@ -135,7 +135,7 @@ yvup2rgb565_venum:
 
     PLD [R0, R3]                       @ preload luma line
 
-    ADR   R12, constants
+    LDR   R12, =constants
 
     VLD1.S16  {D6, D7}, [R12]!         @ D6, D7: 359 |  -88 | -183 | 454 | 256 | 0 | 255 | 0
     VLD1.S32  {D30, D31}, [R12]        @ Q15   :  -45824    |    34816   |  -57984 |     X
@@ -383,7 +383,7 @@ yyvup2rgb565_venum:
 
     PLD [R0, R3]                       @ preload luma line
 
-    ADR   R12, constants
+    LDR   R12, =constants
 
     VLD1.S16  {D6, D7}, [R12]!         @ D6, D7: 359 |  -88 | -183 | 454 | 256 | 0 | 255 | 0
     VLD1.S32  {D30, D31}, [R12]        @ Q15   :  -45824    |    34816   |  -57984 |     X
@@ -644,11 +644,6 @@ end_yyvup2rgb565:
 
                                        @ end of yyvup2rgb565
 
-constants:
-    .hword (COEFF_V_RED),  (COEFF_U_GREEN), (COEFF_V_GREEN), (COEFF_U_BLUE) @   359  | -88   |  -183  | 454
-    .hword (COEFF_Y),      (COEFF_0),       (COEFF_255)    , (COEFF_0)      @   256  |   0   |   255  |  0
-    .word  (COEFF_BIAS_R), (COEFF_BIAS_G),  (COEFF_BIAS_B)                  @ -45824 | 34816 | -57984 |  X
-
 /*--------------------------------------------------------------------------
 * FUNCTION     : yvup2bgr888_venum
 *--------------------------------------------------------------------------
@@ -703,7 +698,7 @@ yvup2bgr888_venum:
 
     PLD [R0, R3]                      @ preload luma line
 
-    ADR   R12, constants
+    LDR   R12, =constants
 
     VLD1.S16  {D6, D7}, [R12]!        @ D6, D7: 359 | -88 | -183 | 454 | 256 | 0 | 255 | 0
     VLD1.S32  {D30, D31}, [R12]       @ Q15   :  -45824   |    34816   |  -57984 |     X
@@ -943,7 +938,7 @@ yyvup2bgr888_venum:
 
     PLD [R0, R3]                       @ preload luma line
 
-    ADR   R12, constants
+    LDR   R12, =constants
 
     VLD1.S16  {D6, D7}, [R12]!         @ D6, D7: 359 | -88 | -183 | 454 | 256 | 0 | 255 | 0
     VLD1.S32  {D30, D31}, [R12]        @ Q15   :  -45824   |    34816   |  -57984 |     X
@@ -1241,7 +1236,7 @@ yvup2abgr8888_venum:
 
     PLD [R0, R3]                       @ preload luma line
 
-    ADR   R12, constants
+    LDR   R12, =constants
 
     VLD1.S16  {D6, D7}, [R12]!         @ D6, D7: 359 |  -88 | -183 | 454 | 256 | 0 | 255 | 0
     VLD1.S32  {D30, D31}, [R12]        @ Q15   :  -45824    |    34816   |  -57984 |     X
@@ -1484,7 +1479,7 @@ yyvup2abgr8888_venum:
 
     PLD [R0, R3]                       @ preload luma line
 
-    ADR   R12, constants
+    LDR   R12, =constants
 
     VLD1.S16  {D6, D7}, [R12]!         @ D6, D7: 359 |  -88 | -183 | 454 | 256 | 0 | 255 | 0
     VLD1.S32  {D30, D31}, [R12]        @ Q15   :  -45824    |    34816   |  -57984 |     X
@@ -1737,5 +1732,12 @@ trailing_yyvup2abgr:
 end_yyvup2abgr:
     LDMFD SP!, {PC}
                                        @ end of yyvup2abgr
+
+.section .rodata
+.align 4
+constants:
+    .hword (COEFF_V_RED),  (COEFF_U_GREEN), (COEFF_V_GREEN), (COEFF_U_BLUE) @   359  | -88   |  -183  | 454
+    .hword (COEFF_Y),      (COEFF_0),       (COEFF_255)    , (COEFF_0)      @   256  |   0   |   255  |  0
+    .word  (COEFF_BIAS_R), (COEFF_BIAS_G),  (COEFF_BIAS_B)                  @ -45824 | 34816 | -57984 |  X
 
 .end
