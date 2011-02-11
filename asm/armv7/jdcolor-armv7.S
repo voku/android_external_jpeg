@@ -133,8 +133,6 @@ yvup2rgb565_venum:
      * ------------------------------------------------------------------------ */
     STMFD SP!, {LR}
 
-    PLD [R0, R3]                       @ preload luma line
-
     LDR   R12, =constants
 
     VLD1.S16  {D6, D7}, [R12]!         @ D6, D7: 359 |  -88 | -183 | 454 | 256 | 0 | 255 | 0
@@ -380,8 +378,6 @@ yyvup2rgb565_venum:
      *  Store stack registers
      * ------------------------------------------------------------------------ */
     STMFD SP!, {LR}
-
-    PLD [R0, R3]                       @ preload luma line
 
     LDR   R12, =constants
 
@@ -696,8 +692,6 @@ yvup2bgr888_venum:
      * ------------------------------------------------------------------------ */
     STMFD SP!, {LR}
 
-    PLD [R0, R3]                      @ preload luma line
-
     LDR   R12, =constants
 
     VLD1.S16  {D6, D7}, [R12]!        @ D6, D7: 359 | -88 | -183 | 454 | 256 | 0 | 255 | 0
@@ -935,8 +929,6 @@ yyvup2bgr888_venum:
      *  Store stack registers
      * ------------------------------------------------------------------------ */
     STMFD SP!, {LR}
-
-    PLD [R0, R3]                       @ preload luma line
 
     LDR   R12, =constants
 
@@ -1234,8 +1226,6 @@ yvup2abgr8888_venum:
      * ------------------------------------------------------------------------ */
     STMFD SP!, {LR}
 
-    PLD [R0, R3]                       @ preload luma line
-
     LDR   R12, =constants
 
     VLD1.S16  {D6, D7}, [R12]!         @ D6, D7: 359 |  -88 | -183 | 454 | 256 | 0 | 255 | 0
@@ -1476,8 +1466,6 @@ yyvup2abgr8888_venum:
      *  Store stack registers
      * ------------------------------------------------------------------------ */
     STMFD SP!, {LR}
-
-    PLD [R0, R3]                       @ preload luma line
 
     LDR   R12, =constants
 
