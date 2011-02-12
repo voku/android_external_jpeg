@@ -687,10 +687,10 @@ end_yyvup2rgb565:
 .type yvup2bgr888_venum, %function
 yvup2bgr888_venum:
 
-    LDR   R12, =constants
+    LDR   R12, =constants2
 
-    VLD1.S16  {D6, D7}, [R12]!        @ D6, D7: 359 | -88 | -183 | 454 | 256 | 0 | 255 | 0
-    VLD1.S32  {D30, D31}, [R12]       @ Q15   :  -45824   |    34816   |  -57984 |     X
+    VLD1.S32  {D0, D1}, [R12,:128]!   @ Q15   :  -45824   |    34816   |  -57984 | 256
+    VLD1.S16  {D6},     [R12,:64]     @ D6, D7: 359 | -88 | -183 | 454
 
     /*-------------------------------------------------------------------------
      *  Load the 5th parameter via stack
@@ -699,9 +699,9 @@ yvup2bgr888_venum:
      * ------------------------------------------------------------------------ */
     LDR R12, [SP]
 
-    VDUP.32    Q12, D30[0]
-    VDUP.32    Q13, D30[1]
-    VDUP.32    Q14, D31[0]
+    VDUP.32    Q12, D0[0]
+    VDUP.32    Q13, D0[1]
+    VDUP.32    Q14, D1[0]
 
     /*-------------------------------------------------------------------------
      *  The main loop
@@ -725,22 +725,22 @@ loop_yvup2bgr888:
      *  Multiply contribution from chrominance, results are in 32-bit
      * ------------------------------------------------------------------------ */
     VMLAL.S16  Q12, D20, D6[0]        @ Q12:  359*(V0,V1,V2,V3)     Red
-    VMLAL.S16  Q12, D18, D7[0]        @ Q12: R0, R1, R2, R3 in 32-bit Q8 format
+    VMLAL.S16  Q12, D18, D1[2]        @ Q12: R0, R1, R2, R3 in 32-bit Q8 format
     VMLAL.S16  Q13, D22, D6[1]        @ Q13:  -88*(U0,U1,U2,U3)     Green
     VMLAL.S16  Q13, D20, D6[2]        @ Q13:  -88*(U0,U1,U2,U3) - 183*(V0,V1,V2,V3)
-    VMLAL.S16  Q13, D18, D7[0]        @ Q13: G0, G1, G2, G3 in 32-bit Q8 format
+    VMLAL.S16  Q13, D18, D1[2]        @ Q13: G0, G1, G2, G3 in 32-bit Q8 format
     VMLAL.S16  Q14, D22, D6[3]        @ Q14:  454*(U0,U1,U2,U3)     Blue
-    VMLAL.S16  Q14, D18, D7[0]        @ Q14: B0, B1, B2, B3 in 32-bit Q8 format
+    VMLAL.S16  Q14, D18, D1[2]        @ Q14: B0, B1, B2, B3 in 32-bit Q8 format
 
     /*-------------------------------------------------------------------------
      *  Right shift eight bits with rounding
      * ------------------------------------------------------------------------ */
     VSHRN.S32   D18 , Q12, #8         @ D18: R0, R1, R2, R3 in 16-bit Q0 format
-    VDUP.32     Q12, D30[0]
+    VDUP.32     Q12, D0[0]
     VSHRN.S32   D20 , Q13, #8         @ D20: G0, G1, G2, G3 in 16-bit Q0 format
-    VDUP.32     Q13, D30[1]
+    VDUP.32     Q13, D0[1]
     VSHRN.S32   D22,  Q14, #8         @ D22: B0, B1, B2, B3 in 16-bit Q0 format
-    VDUP.32     Q14, D31[0]
+    VDUP.32     Q14, D1[0]
 
     /*-------------------------------------------------------------------------
      *  Done with the first 4 elements, continue on the next 4 elements
@@ -749,22 +749,22 @@ loop_yvup2bgr888:
      *  Multiply contribution from chrominance, results are in 32-bit
      * ------------------------------------------------------------------------ */
     VMLAL.S16  Q12, D21, D6[0]        @ Q12:  359*(V0,V1,V2,V3)     Red
-    VMLAL.S16  Q12, D19, D7[0]        @ Q12: R0, R1, R2, R3 in 32-bit Q8 format
+    VMLAL.S16  Q12, D19, D1[2]        @ Q12: R0, R1, R2, R3 in 32-bit Q8 format
     VMLAL.S16  Q13, D23, D6[1]        @ Q13:  -88*(U0,U1,U2,U3)     Green
     VMLAL.S16  Q13, D21, D6[2]        @ Q13:  -88*(U0,U1,U2,U3) - 183*(V0,V1,V2,V3)
-    VMLAL.S16  Q13, D19, D7[0]        @ Q13: G0, G1, G2, G3 in 32-bit Q8 format
+    VMLAL.S16  Q13, D19, D1[2]        @ Q13: G0, G1, G2, G3 in 32-bit Q8 format
     VMLAL.S16  Q14, D23, D6[3]        @ Q14:  454*(U0,U1,U2,U3)     Blue
-    VMLAL.S16  Q14, D19, D7[0]        @ Q14: B0, B1, B2, B3 in 32-bit Q8 format
+    VMLAL.S16  Q14, D19, D1[2]        @ Q14: B0, B1, B2, B3 in 32-bit Q8 format
 
     /*-------------------------------------------------------------------------
      *  Right shift eight bits with rounding
      * ------------------------------------------------------------------------ */
     VSHRN.S32   D19 , Q12, #8         @ D18: R0, R1, R2, R3 in 16-bit Q0 format
-    VDUP.32     Q12, D30[0]
+    VDUP.32     Q12, D0[0]
     VSHRN.S32   D21 , Q13, #8         @ D20: G0, G1, G2, G3 in 16-bit Q0 format
-    VDUP.32     Q13, D30[1]
+    VDUP.32     Q13, D0[1]
     VSHRN.S32   D23,  Q14, #8         @ D22: B0, B1, B2, B3 in 16-bit Q0 format
-    VDUP.32     Q14, D31[0]
+    VDUP.32     Q14, D1[0]
 
     /*-------------------------------------------------------------------------
      *  Clamp the value to be within [0~255]
@@ -871,10 +871,10 @@ trailing_yvup2bgr888:
 */
 .type yyvup2bgr888_venum, %function
 yyvup2bgr888_venum:
-    LDR   R12, =constants
+    LDR   R12, =constants2
 
-    VLD1.S16  {D6, D7}, [R12]!         @ D6, D7: 359 | -88 | -183 | 454 | 256 | 0 | 255 | 0
-    VLD1.S32  {D0, D1}, [R12]          @ Q15   :  -45824   |    34816   |  -57984 |     X
+    VLD1.S32  {D0, D1}, [R12,:128]!    @ Q15   :  -45824   |    34816   |  -57984 | 256
+    VLD1.S16  {D6},     [R12,:64]      @ D6, D7: 359 | -88 | -183 | 454
 
     /*-------------------------------------------------------------------------
      *  Load the 5th parameter via stack
@@ -918,16 +918,16 @@ loop_yyvup2bgr888:
      *  Calculate Red, Green, Blue
      * ------------------------------------------------------------------------ */
     VMOV.S32   Q9, Q1
-    VMLAL.S16  Q1, D24, D7[0]          @ Q1: R0, R2, R4, R6 in 32-bit Q8 format
-    VMLAL.S16  Q9, D26, D7[0]          @ Q9: R1, R3, R5, R7 in 32-bit Q8 format
+    VMLAL.S16  Q1, D24, D1[2]          @ Q1: R0, R2, R4, R6 in 32-bit Q8 format
+    VMLAL.S16  Q9, D26, D1[2]          @ Q9: R1, R3, R5, R7 in 32-bit Q8 format
 
     VMOV.S32   Q10, Q2
-    VMLAL.S16  Q2,  D24, D7[0]         @ Q2:  G0, G2, G4, G6 in 32-bit Q8 format
-    VMLAL.S16  Q10, D26, D7[0]         @ Q10: G1, G3, G5, G7 in 32-bit Q8 format
+    VMLAL.S16  Q2,  D24, D1[2]         @ Q2:  G0, G2, G4, G6 in 32-bit Q8 format
+    VMLAL.S16  Q10, D26, D1[2]         @ Q10: G1, G3, G5, G7 in 32-bit Q8 format
 
     VMOV.S32   Q11, Q8
-    VMLAL.S16  Q8,  D24, D7[0]         @ Q8:  B0, B2, B4, B6 in 32-bit Q8 format
-    VMLAL.S16  Q11, D26, D7[0]         @ Q11: B1, B3, B5, B7 in 32-bit Q8 format
+    VMLAL.S16  Q8,  D24, D1[2]         @ Q8:  B0, B2, B4, B6 in 32-bit Q8 format
+    VMLAL.S16  Q11, D26, D1[2]         @ Q11: B1, B3, B5, B7 in 32-bit Q8 format
 
     /*-------------------------------------------------------------------------
      *  Right shift eight bits with rounding
@@ -972,16 +972,16 @@ loop_yyvup2bgr888:
      *  Calculate Red, Green, Blue
      * ------------------------------------------------------------------------ */
     VMOV.S32   Q9, Q1
-    VMLAL.S16  Q1, D25, D7[0]          @ Q1: R8 R10 R12 R14 in 32-bit Q8 format
-    VMLAL.S16  Q9, D27, D7[0]          @ Q9: R9 R11 R13 R15 in 32-bit Q8 format
+    VMLAL.S16  Q1, D25, D1[2]          @ Q1: R8 R10 R12 R14 in 32-bit Q8 format
+    VMLAL.S16  Q9, D27, D1[2]          @ Q9: R9 R11 R13 R15 in 32-bit Q8 format
 
     VMOV.S32   Q10, Q2
-    VMLAL.S16  Q2,  D25, D7[0]         @ Q2: G0, G2, G4, G6 in 32-bit Q8 format
-    VMLAL.S16  Q10, D27, D7[0]         @ Q10 : G1, G3, G5, G7 in 32-bit Q8 format
+    VMLAL.S16  Q2,  D25, D1[2]         @ Q2: G0, G2, G4, G6 in 32-bit Q8 format
+    VMLAL.S16  Q10, D27, D1[2]         @ Q10 : G1, G3, G5, G7 in 32-bit Q8 format
 
     VMOV.S32   Q11, Q8
-    VMLAL.S16  Q8,  D25, D7[0]         @ Q8: B0, B2, B4, B6 in 32-bit Q8 format
-    VMLAL.S16  Q11, D27, D7[0]         @ Q11 : B1, B3, B5, B7 in 32-bit Q8 format
+    VMLAL.S16  Q8,  D25, D1[2]         @ Q8: B0, B2, B4, B6 in 32-bit Q8 format
+    VMLAL.S16  Q11, D27, D1[2]         @ Q11 : B1, B3, B5, B7 in 32-bit Q8 format
 
     /*-------------------------------------------------------------------------
      *  Right shift eight bits with rounding
@@ -1602,5 +1602,10 @@ constants:
     .hword (COEFF_V_RED),  (COEFF_U_GREEN), (COEFF_V_GREEN), (COEFF_U_BLUE) @   359  | -88   |  -183  | 454
     .hword (COEFF_Y),      (COEFF_0),       (COEFF_255)    , (COEFF_0)      @   256  |   0   |   255  |  0
     .word  (COEFF_BIAS_R), (COEFF_BIAS_G),  (COEFF_BIAS_B)                  @ -45824 | 34816 | -57984 |  X
+
+.align 4
+constants2:
+    .word  (COEFF_BIAS_R), (COEFF_BIAS_G),  (COEFF_BIAS_B) , (COEFF_Y)      @ -45824 | 34816 | -57984 | 256
+    .hword (COEFF_V_RED),  (COEFF_U_GREEN), (COEFF_V_GREEN), (COEFF_U_BLUE) @   359  | -88   |  -183  | 454
 
 .end
