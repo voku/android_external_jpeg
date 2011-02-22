@@ -714,11 +714,11 @@ loop_yvup2bgr888:
      *  D14  : V0  V1  V2  V3  V4  V5  V6  V7
      *  D15  : U0  U1  U2  U3  U4  U5  U6  U7
      * ------------------------------------------------------------------------ */
-    VLD1.U8  {D12},  [p_y]!           @ Load 8 Luma elements (uint8) to D12
+    VLD1.U8  {D12},  [p_y,:64]!       @ Load 8 Luma elements (uint8) to D12
     VMOVL.U8 Q9,  D12
-    VLD1.U8  {D14},  [p_cr]!          @ Load 8 Cr elements (uint8) to D14
+    VLD1.U8  {D14},  [p_cr,:64]!      @ Load 8 Cr elements (uint8) to D14
     VMOVL.U8 Q10, D14
-    VLD1.U8  {D15},  [p_cb]!          @ Load 8 Cb elements (uint8) to D15
+    VLD1.U8  {D15},  [p_cb,:64]!      @ Load 8 Cb elements (uint8) to D15
     VMOVL.U8 Q11, D15
 
     /*-------------------------------------------------------------------------
@@ -894,9 +894,9 @@ loop_yyvup2bgr888:
      *  D14  : V0  V1  V2  V3  V4  V5  V6  V7
      *  D15  : U0  U1  U2  U3  U4  U5  U6  U7
      * ------------------------------------------------------------------------ */
-    VLD2.U8  {D24,D26}, [p_y]!         @ Load 16 Luma elements (uint8) to D24,D26
-    VLD1.U8  {D14},  [p_cr]!           @ Load 8 Cr elements (uint8) to D14
-    VLD1.U8  {D15},  [p_cb]!           @ Load 8 Cb elements (uint8) to D15
+    VLD2.U8  {D24,D26}, [p_y,:64]!     @ Load 16 Luma elements (uint8) to D24,D26
+    VLD1.U8  {D14},  [p_cr,:64]!       @ Load 8 Cr elements (uint8) to D14
+    VLD1.U8  {D15},  [p_cb,:64]!       @ Load 8 Cb elements (uint8) to D15
 
     VMOVL.U8 Q12, D24
     VDUP.32  Q1,  D0[0]
