@@ -279,6 +279,20 @@ h2v1_merged_upsample (j_decompress_ptr cinfo,
                        cinfo->output_width);
   }
 }
+#elif defined JPEG_USE_ARMV6
+{
+  my_upsample_ptr upsample = (my_upsample_ptr) cinfo->upsample;
+  JSAMPROW inptr0, inptr1, inptr2;
+  JSAMPROW outptr;
+
+  inptr0 = input_buf[0][in_row_group_ctr];
+  inptr1 = input_buf[1][in_row_group_ctr];
+  inptr2 = input_buf[2][in_row_group_ctr];
+  outptr = output_buf[0];
+
+  yyuvp2rgb888_armv6(inptr0, inptr2, inptr1, outptr,
+                     cinfo->output_width);
+}
 #else
 {
   my_upsample_ptr upsample = (my_upsample_ptr) cinfo->upsample;
@@ -542,6 +556,25 @@ h2v2_merged_upsample (j_decompress_ptr cinfo,
                        (UINT8*) outptr1,
                        cinfo->output_width);
   }
+}
+#elif defined JPEG_USE_ARMV6
+{
+  my_upsample_ptr upsample = (my_upsample_ptr) cinfo->upsample;
+  JSAMPROW outptr0, outptr1;
+  JSAMPROW inptr00, inptr01, inptr1, inptr2;
+  inptr00 = input_buf[0][in_row_group_ctr*2];
+  inptr01 = input_buf[0][in_row_group_ctr*2 + 1];
+  inptr1  = input_buf[1][in_row_group_ctr];
+  inptr2  = input_buf[2][in_row_group_ctr];
+  outptr0 = output_buf[0];
+  outptr1 = output_buf[1];
+
+  yyuvp2rgb888_armv6(inptr00, inptr1, inptr2, outptr0,
+                     cinfo->output_width);
+
+  yyuvp2rgb888_armv6(inptr01, inptr1, inptr2, outptr1,
+                     cinfo->output_width);
+
 }
 #else
 {
