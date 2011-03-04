@@ -168,6 +168,26 @@ ycc_rgb_convert (j_decompress_ptr cinfo,
                       cinfo->output_width);
   }
 }
+#elif defined JPEG_USE_ARMV6
+{
+  my_cconvert_ptr cconvert = (my_cconvert_ptr) cinfo->cconvert;
+  JSAMPROW inptr0, inptr1, inptr2;
+  JSAMPROW outptr;
+  JDIMENSION row;
+
+  for (row = 0; row < (JDIMENSION)num_rows; row++)
+  {
+    inptr0     = input_buf[0][input_row];
+    inptr1     = input_buf[1][input_row];
+    inptr2     = input_buf[2][input_row];
+
+    input_row++;
+    outptr = *output_buf++;
+
+    yuvp2rgb888_armv6(inptr0, inptr1, inptr2, outptr,
+                      cinfo->output_width);
+  }
+}
 #else
 {
   my_cconvert_ptr cconvert = (my_cconvert_ptr) cinfo->cconvert;
