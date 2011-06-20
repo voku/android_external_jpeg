@@ -124,7 +124,7 @@ start_pass (j_decompress_ptr cinfo)
 #endif
 #ifdef DCT_IFAST_SUPPORTED
       case JDCT_IFAST:
-#ifdef ANDROID_JPEG_USE_VENUM
+#if defined ANDROID_JPEG_USE_VENUM || defined JPEG_USE_ARMV6
         /* Use VeNum implementation of jpeg_idct_islow even if fast DCT option is selected */
 	method_ptr = jpeg_idct_islow;
 	method = JDCT_ISLOW;

@@ -53,7 +53,7 @@ typedef JMETHOD(void, float_DCT_method_ptr, (FAST_FLOAT * data));
  * Each IDCT routine has its own ideas about the best dct_table element type.
  */
 
-typedef MULTIPLIER ISLOW_MULT_TYPE; /* short or int, whichever is faster */
+typedef short ISLOW_MULT_TYPE; /* short or int, whichever is faster */
 #if BITS_IN_JSAMPLE == 8
 typedef MULTIPLIER IFAST_MULT_TYPE; /* 16 bits is OK, use short if faster */
 #define IFAST_SCALE_BITS  2	/* fractional bits in scale factors */

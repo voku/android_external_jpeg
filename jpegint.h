@@ -304,6 +304,11 @@ EXTERN (void) yyvup2abgr8888_venum (UINT8 * pLumaLine,
                 JDIMENSION nLineWidth);
 #endif
 
+EXTERN (void) yuvp2rgb888_armv6 (UINT8 *y, UINT8 *u, UINT8 *v,
+                                 UINT8 *rgb, int width);
+EXTERN (void) yyuvp2rgb888_armv6(UINT8 *y, UINT8 *u, UINT8 *v,
+                                 UINT8 *rgb, int width);
+
 /* Miscellaneous useful macros */
 
 #undef MAX
