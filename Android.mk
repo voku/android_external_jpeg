@@ -44,7 +44,7 @@ LOCAL_SRC_FILES += jidctint.c jidctfst.S jidctred.c
 endif # ANDROID_JPEG_USE_VENUM
 endif
 
-LOCAL_CFLAGS += -DAVOID_TABLES 
+LOCAL_CFLAGS += -DAVOID_TABLES
 LOCAL_CFLAGS += -O3 -fstrict-aliasing -fprefetch-loop-arrays
 
 LOCAL_MODULE:= libjpeg
