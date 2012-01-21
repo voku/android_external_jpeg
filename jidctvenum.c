@@ -58,13 +58,6 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
   JCOEFPTR coefptr;
   int ctr;
 
-  /* idct_out temp buffer is needed because output_buf sample allocation is 8 bits,
-   * while IDCT output expects 16 bits.
-   */
-  INT16 idct_out[DCTSIZE2];  /* buffers data between passes */
-  JSAMPROW outptr;
-  INT16*  idctptr;
-
   coefptr  = coef_block;
   quantptr = (ISLOW_MULT_TYPE *) compptr->dct_table;
 
@@ -84,24 +77,10 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     coefptr++;
   }
 
-  idct_8x8_venum((INT16*)coef_block,
-                 (INT16*)idct_out,
-                 DCTSIZE * sizeof(INT16));
-
-  idctptr = idct_out;
-  for (ctr = 0; ctr < DCTSIZE; ctr++) {
-    outptr = output_buf[ctr] + output_col;
-    // outptr sample size is 1 byte while idctptr sample size is 2 bytes
-    outptr[0] = idctptr[0];
-    outptr[1] = idctptr[1];
-    outptr[2] = idctptr[2];
-    outptr[3] = idctptr[3];
-    outptr[4] = idctptr[4];
-    outptr[5] = idctptr[5];
-    outptr[6] = idctptr[6];
-    outptr[7] = idctptr[7];
-    idctptr  += DCTSIZE;      /* advance pointers to next row */
-  }
+  idct_8x8_venum(coef_block,
+                 output_buf,
+                 DCTSIZE * sizeof(INT16),
+                 output_col);
 }
 
 GLOBAL(void)

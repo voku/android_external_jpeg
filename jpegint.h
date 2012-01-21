@@ -297,7 +297,7 @@ struct jpeg_color_quantizer {
 EXTERN (void) idct_1x1_venum (INT16 * coeffPtr, INT16 * samplePtr, INT32 stride);
 EXTERN (void) idct_2x2_venum (INT16 * coeffPtr, INT16 * samplePtr, INT32 stride);
 EXTERN (void) idct_4x4_venum (INT16 * coeffPtr, INT16 * samplePtr, INT32 stride);
-EXTERN (void) idct_8x8_venum (INT16 * coeffPtr, INT16 * samplePtr, INT32 stride);
+EXTERN (void) idct_8x8_venum (INT16 * coeffPtr, UINT8 **samplePtr, INT32 stride, INT32 col);
 
 #ifndef ANDROID_JPEG_DISABLE_VENUM_YCC_RGB_565
 /* Color conversion routines */
