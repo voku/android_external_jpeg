@@ -47,7 +47,7 @@ else
 ifeq ($(ANDROID_JPEG_USE_VENUM),true)
 LOCAL_SRC_FILES += jidctvenum.c
 LOCAL_SRC_FILES += asm/armv7/jdcolor-armv7.S
-LOCAL_SRC_FILES += asm/armv7/jdcolor-android-armv7.S
+#LOCAL_SRC_FILES += asm/armv7/jdcolor-android-armv7.S
 LOCAL_SRC_FILES += asm/armv7/jdidct-armv7.S
 LOCAL_CFLAGS    += -DANDROID_JPEG_USE_VENUM
 else # ANDROID_JPEG_USE_VENUM, false
