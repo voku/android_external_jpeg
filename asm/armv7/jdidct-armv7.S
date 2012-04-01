@@ -221,53 +221,39 @@
         @ 3. use multiple store. Each store will save one row of output.
         @    The st queue size is 4, so do no more than 4 str in sequence.
         @==================================================================
-        ldr       r5, =constants+5*16  @constants[5],
-        vld1.16   d10, [r5]            @load clamping parameters
-        vdup.s16  q6,  d10[0]          @q6=[0000000000000000]
-        vdup.s16  q7,  d10[1]          @q7=[FFFFFFFFFFFFFFFF]
+        vqshrun.s16 d16, q8,  #6
+        vqshrun.s16 d17, q9,  #6
+        vqshrun.s16 d18, q10, #6
+        vqshrun.s16 d19, q11, #6
+        vqshrun.s16 d20, q12, #6
+        vqshrun.s16 d21, q13, #6
+        vqshrun.s16 d22, q14, #6
+        vqshrun.s16 d23, q15, #6
 
-        @Save the results
-        vshr.s16  q8,  q8,  #6         @q8 = vy0
-        vmax.s16  q8,  q8,  q6         @clamp >0
-        vmin.s16  q8,  q8,  q7         @clamp <255
-
-        vshr.s16  q9,  q9,  #6         @q9 = vy1
-        vmax.s16  q9,  q9,  q6         @clamp >0
-        vmin.s16  q9,  q9,  q7         @clamp <255
-
-        vshr.s16  q10, q10, #6         @q10 = vy2
-        vmax.s16  q10, q10, q6         @clamp >0
-        vmin.s16  q10, q10, q7         @clamp <255
-
-        vshr.s16  q11, q11, #6         @q11 = vy3
-        vmax.s16  q11, q11, q6         @clamp >0
-        vmin.s16  q11, q11, q7         @clamp <255
-
-        vst1.16  {d16, d17},[r1],r2    @q8 =row0
-        vst1.16  {d18, d19},[r1],r2    @q9 =row1
-        vst1.16  {d20, d21},[r1],r2    @q10=row2
-        vst1.16  {d22, d23},[r1],r2    @q11=row3
-
-        vshr.s16  q12, q12, #6         @q12 = vy4
-        vmax.s16  q12, q12, q6         @clamp >0
-        vmin.s16  q12, q12, q7         @clamp <255
-
-        vshr.s16  q13, q13, #6         @q13 = vy5
-        vmax.s16  q13, q13, q6         @clamp >0
-        vmin.s16  q13, q13, q7         @clamp <255
-
-        vshr.s16  q14, q14, #6         @q14 = vy6
-        vmax.s16  q14, q14, q6         @clamp >0
-        vmin.s16  q14, q14, q7         @clamp <255
-
-        vshr.s16  q15, q15, #6         @q15 = vy7
-        vmax.s16  q15, q15, q6         @clamp >0
-        vmin.s16  q15, q15, q7         @clamp <255
-
-        vst1.16  {d24, d25},[r1],r2    @q12=row4
-        vst1.16  {d26, d27},[r1],r2    @q13=row5
-        vst1.16  {d28, d29},[r1],r2    @q14=row6
-        vst1.16  {d30, d31},[r1]       @q15=row7
+        ldr       r12, [r1], #4
+        add       r12, r12, r3
+        vst1.8    {d16}, [r12]
+        ldr       r12, [r1], #4
+        add       r12, r12, r3
+        vst1.8    {d17}, [r12]
+        ldr       r12, [r1], #4
+        add       r12, r12, r3
+        vst1.8    {d18}, [r12]
+        ldr       r12, [r1], #4
+        add       r12, r12, r3
+        vst1.8    {d19}, [r12]
+        ldr       r12, [r1], #4
+        add       r12, r12, r3
+        vst1.8    {d20}, [r12]
+        ldr       r12, [r1], #4
+        add       r12, r12, r3
+        vst1.8    {d21}, [r12]
+        ldr       r12, [r1], #4
+        add       r12, r12, r3
+        vst1.8    {d22}, [r12]
+        ldr       r12, [r1], #4
+        add       r12, r12, r3
+        vst1.8    {d23}, [r12]
     .endm
 
     .macro BIG_BODY_TRANSPOSE_INPUT
